@@ -3,8 +3,8 @@ class Archive(val name: String) {
     val notes: List<Note> get() = _notes.toList()
     private var nextId = 1
 
-    fun addNote(name: String): Note {
-        val note = Note(nextId++, name)
+    fun addNote(name: String, content: String): Note {
+        val note = Note(nextId++, name, content)
         _notes.add(note)
         return note
     }
