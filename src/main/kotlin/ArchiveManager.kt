@@ -9,4 +9,6 @@ class ArchiveManager {
         _archives.add(archive)
         return archive
     }
+
+    fun getArchive(index: Int): Archive? = _archives.getOrNull(index)
 }
