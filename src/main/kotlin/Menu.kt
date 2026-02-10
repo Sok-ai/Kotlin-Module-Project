@@ -1,4 +1,3 @@
-import java.util.InputMismatchException
 import java.util.Scanner
 
 class Menu(private val scanner: Scanner) {
@@ -7,41 +6,53 @@ class Menu(private val scanner: Scanner) {
         items: List<String>,
         onItemSelected: (Int) -> Unit
     ): Boolean {
-        try {
+        while (true) {
             println(title)
-            items.forEachIndexed { index, text ->
-                println("$index. $text")
+            items.forEachIndexed { index, item ->
+                println("${index + 1}. $item")
             }
-            val selectedVar = scanner.nextInt()
-            if (selectedVar in 0 until items.size) {
-                onItemSelected(selectedVar)
-            } else {
-                println("Некорректный выбор. Введите число от 0 до ${items.size - 1}")
+
+            print("Выберите пункт (1-${items.size}): ")
+            val input = scanner.nextLine()
+            val choice = input.toIntOrNull()
+
+            when {
+                choice == null -> {
+                    println("Ошибка: нужно ввести число")
+                }
+                choice < 1 || choice > items.size -> {
+                    println("Ошибка: нет такого пункта. Введите число от 1 до ${items.size}")
+                }
+                choice == items.size -> {
+                    return false
+                }
+                else -> {
+                    onItemSelected(choice - 1)
+                    return true
+                }
             }
-        } catch (_: InputMismatchException) {
-            println("Нужно число от 0 до ${items.size - 1}")
-            scanner.nextLine()
         }
-        return true
     }
 
     fun showWelcome() {
-        println("Доброе пожаловать в приложение \"Заметки\"")
+        println("Добро пожаловать в приложение \"Заметки\"")
         println("---------------------------")
     }
 
     fun showGoodbye() {
         println("---------------------------")
-        println("Спасибо, что попробовали наше приложение. \nДо скорых встреч!")
+        println("Спасибо, что попробовали наше приложение.")
+        println("До скорых встреч!")
     }
 
     fun readString(prompt: String): String {
-        print("$prompt: ")
-        return scanner.nextLine()
-    }
-
-    fun readLine(prompt: String): String {
-        println(prompt)
-        return scanner.nextLine()
+        while (true) {
+            print("$prompt: ")
+            val input = scanner.nextLine().trim()
+            if (input.isNotBlank()) {
+                return input
+            }
+            println("Поле не может быть пустым. Попробуйте снова.")
+        }
     }
 }
