@@ -9,7 +9,6 @@ class Archive(val name: String) {
         return note
     }
 
-    fun getNoteById(id: Int): Note? = _notes.find { it.id == id }
+    fun getNote(index: Int): Note? = _notes.getOrNull(index)
 
-    fun isEmpty() = _notes.isEmpty()
 }
